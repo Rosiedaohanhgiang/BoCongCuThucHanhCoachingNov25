@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bộ Công Cụ Thực Hành Coaching</title>
+    
+    <!-- 1. Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 2. Tải Font (Oswald) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- 3. Tải Icon (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* Thiết lập font chữ và màu sắc chính */
+        body {
+            font-family: 'Oswald', sans-serif;
+            background-color: #f4f7f6; /* Một màu nền sáng, sạch sẽ */
+        }
+
+        /* Tùy chỉnh màu sắc thương hiệu */
+        .bg-brand-orange { background-color: #FF9800; }
+        .text-brand-orange { color: #FF9800; }
+        .border-brand-orange { border-color: #FF9800; }
+        
+        .bg-brand-green { background-color: #009688; }
+        .text-brand-green { color: #009688; }
+        .border-brand-green { border-color: #009688; }
+
+        .bg-brand-blue { background-color: #5C6BC0; }
+        .text-brand-blue { color: #5C6BC0; }
+        .border-brand-blue { border-color: #5C6BC0; }
+
+        .bg-brand-darkblue { background-color: #1a237e; }
+        .text-brand-darkblue { color: #1a237e; }
+
+        .bg-brand-red { background-color: #ef4444; }
+        .text-brand-red { color: #ef4444; }
+
+        .bg-brand-purple { background-color: #a855f7; }
+        .text-brand-purple { color: #a855f7; }
+        
+        /* Kiểu cho Tab */
+        .tab-btn {
+            @apply px-4 py-3 text-base font-semibold text-gray-600 border-b-4 border-transparent transition-all duration-300;
+        }
+        .tab-btn.tab-active {
+            @apply text-brand-darkblue border-brand-darkblue;
+        }
+        .tab-btn:hover {
+            @apply bg-gray-100;
+        }
+        
+        /* Kiểu cho Sub-Tab (Biểu mẫu / Ví dụ) */
+        .mode-btn {
+            @apply px-4 py-2 text-sm font-medium text-gray-500 bg-gray-200 rounded-md transition-all;
+        }
+        .mode-btn.mode-active {
+            @apply text-white;
+        }
+
+        /* Kiểu cho Form */
+        .form-label {
+            @apply text-2xl font-bold mb-2 block;
+        }
+        .form-textarea {
+            @apply w-full p-4 border border-gray-300 rounded-lg shadow-inner min-h-[120px] text-lg text-gray-800 transition-all;
+            font-family: Arial, sans-serif; /* Dùng font dễ đọc cho nội dung nhập liệu */
+        }
+        .form-textarea:focus {
+            @apply border-brand-blue ring-2 ring-brand-blue/50 outline-none;
+        }
+        .form-textarea-example {
+            @apply w-full p-4 border-l-4 border-brand-blue bg-blue-50/50 rounded-lg min-h-[120px] text-lg text-gray-700 italic;
+            font-family: Arial, sans-serif;
+        }
+        .form-checklist-label {
+             @apply flex items-center text-xl text-gray-700 bg-white p-4 rounded-lg shadow-sm border;
+        }
+        .form-checklist-input {
+            @apply h-5 w-5 text-brand-blue rounded mr-3 focus:ring-brand-blue;
+        }
+        
+        /* Kiểu cho Phần Mô tả Công cụ (MỚI) */
+        .tool-description {
+            @apply text-lg text-gray-700 bg-gray-50 border-l-4 border-brand-orange p-4 rounded-r-lg mb-8 shadow-sm;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .tool-description-example {
+            @apply text-lg text-gray-700 bg-blue-50 border-l-4 border-brand-blue p-4 rounded-r-lg mb-8 shadow-sm;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .tool-description ul, .tool-description-example ul {
+            @apply list-disc list-inside ml-4 mt-2;
+        }
+
+
+        /* CSS cho bản in (A4) */
+        @media print {
+            /* Ẩn mọi thứ KHÔNG liên quan đến nội dung in */
+            body > *:not(#print-area) {
+                display: none;
+            }
+            
+            /* Hiển thị vùng in và reset body */
+            #print-area {
+                display: block !important;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+            body {
+                background-color: #fff;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Thiết lập trang A4 */
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+
+            /* Reset màu chữ và nền cho nội dung in */
+            .print-content {
+                color: #000 !important;
+                background-color: #fff !important;
+            }
+            .print-content h1, .print-content h2, .print-content h3 {
+                color: #000 !important;
+            }
+            .print-content .form-textarea-example {
+                background-color: #f0f0f0 !important;
+                border-color: #5C6BC0 !important;
+                color: #333 !important;
+            }
+            /* In phần mô tả (MỚI) */
+            .print-content .tool-description {
+                background-color: #fef9f2 !important; 
+                border-color: #FF9800 !important; 
+                color: #000 !important;
+                font-size: 10pt;
+            }
+            .print-content .tool-description-example {
+                background-color: #f0f4ff !important;
+                border-color: #5C6BC0 !important;
+                color: #000 !important;
+                font-size: 10pt;
+            }
+            
+            /* Đảm bảo textarea hiển thị đúng nội dung khi in */
+            .form-textarea {
+                border: 1px dashed #ccc !important;
+                background: #f9f9f9 !important;
+                color: #000 !important;
+                display: block;
+                width: 100%;
+                overflow: visible; /* Hiển thị nội dung bị tràn */
+                height: auto; /* Tự động co giãn */
+                white-space: pre-wrap; /* Giữ định dạng */
+            }
+
+            /* Checklist khi in */
+            .form-checklist-label {
+                background-color: #fff !important;
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+            .form-checklist-input {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 1.25rem;
+                height: 1.25rem;
+                border: 1px solid #999;
+                border-radius: 0.25rem;
+                margin-right: 0.75rem;
+                vertical-align: middle;
+                position: relative;
+                top: -2px;
+            }
+            .form-checklist-input:checked {
+                background-color: #5C6BC0;
+                border-color: #5C6BC0;
+            }
+            .form-checklist-input:checked::after {
+                content: '✔';
+                color: white;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 0.8rem;
+            }
+
+            /* Ẩn các nút trong vùng in */
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- HEADER & TAB NAVIGATION -->
+    <header class="bg-white shadow-md sticky top-0 z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <h1 class="text-3xl font-bold text-brand-darkblue">
+                    <i class="fa-solid fa-toolbox mr-2"></i>
+                    BỘ CÔNG CỤ THỰC HÀNH COACHING
+                </h1>
+            </div>
+            <nav id="tab-nav" class="flex flex-wrap border-b border-gray-200">
+                <!-- Tabs sẽ được chèn bởi JS -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main id="content-container" class="container mx-auto p-6 md:p-10">
+        <!-- Nội dung Tab sẽ được chèn bởi JS -->
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center text-sm text-gray-500 py-6 mt-10 border-t border-gray-200 bg-white">
+        Học Liệu cho đào tạo. Bản quyền thuộc Rosie Đào Hạnh Giang CEO Build Talents
+    </footer>
+
+    <!-- Vùng chứa nội dung để in (ẩn) -->
+    <div id="print-area" class="hidden"></div>
+
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // === CƠ SỞ DỮ LIỆU CÔNG CỤ ===
+        // Nơi chứa toàn bộ HTML cho các biểu mẫu và ví dụ
+        const toolData = {
+            't-grow': {
+                title: 'T-GROW',
+                icon: 'fa-solid fa-leaf',
+                color: 'brand-green',
+                description: `
+                    <div class="tool-description">
+                        <h3 class="text-xl font-bold text-brand-orange mb-2">Tổng quan về T-GROW</h3>
+                        <p>Đây là công cụ CỐT LÕI và linh hoạt nhất trong bộ công cụ. Mô hình T-GROW (Topic, Goal, Reality, Options, Will) cung cấp một cấu trúc rõ ràng cho một cuộc hội thoại coaching hoàn chỉnh.</p>
+                        <ul>
+                            <li><strong>Khi nào dùng:</strong> Các buổi coaching phát triển, lập kế hoạch, giải quyết vấn đề, hoặc khi nhân viên nói "Tôi đang bị vướng..."</li>
+                            <li><strong>Triết lý:</strong> Tin tưởng coachee (nhân viên) có đủ nguồn lực và câu trả lời. Vai trò của bạn là khơi gợi, không phải tư vấn.</li>
+                        </ul>
+                    </div>
+                `,
+                example_description: `
+                    <div class="tool-description-example">
+                        <h3 class="text-xl font-bold text-brand-blue mb-2">Phân tích Ví dụ</h3>
+                        <p>Ví dụ này minh họa một kịch bản quản lý cổ điển: nhân viên bị "quá tải". Thay vì nhảy vào "sửa chữa" (ví dụ: "Em làm task A trước đi"), người quản lý-coach đã dùng T-GROW để giúp nhân viên tự tìm ra giải pháp, tăng cường khả năng tự chủ và cam kết của họ.</p>
+                    </div>
+                `,
+                empty_html: `
+                    <form id="t-grow-form" class="space-y-6">
+                        <div>
+                            <label class="form-label text-brand-orange"><i class="fa-solid fa-compass mr-2"></i> T - TOPIC (Chủ đề)</label>
+                            <p class="text-gray-600 text-lg mb-2">Bạn muốn thảo luận điều gì? Điều gì quan trọng nhất với bạn lúc này?</p>
+                            <textarea name="topic" class="form-textarea" placeholder="Nhập bối cảnh, chủ đề..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-blue"><i class="fa-solid fa-bullseye mr-2"></i> G - GOAL (Mục tiêu)</label>
+                            <p class="text-gray-600 text-lg mb-2">Kết quả lý tưởng bạn muốn đạt được SAU PHIÊN HỌP này là gì?</p>
+                            <textarea name="goal" class="form-textarea" placeholder="Nhập mục tiêu của phiên coaching..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-green"><i class="fa-solid fa-magnifying-glass mr-2"></i> R - REALITY (Thực tế)</label>
+                            <p class="text-gray-600 text-lg mb-2">Điều gì đang diễn ra? Bạn đã thử làm gì? Trở ngại thực sự là gì?</p>
+                            <textarea name="reality" class="form-textarea" placeholder="Nhập thực tế, các sự thật, trở ngại..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-red"><i class="fa-solid fa-lightbulb mr-2"></i> O - OPTIONS (Lựa chọn)</label>
+                            <p class="text-gray-600 text-lg mb-2">Bạn có những lựa chọn nào? Nếu có cây đũa thần, bạn sẽ làm gì?</p>
+                            <textarea name="options" class="form-textarea" placeholder="Liệt kê các lựa chọn, brainstorm..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-purple"><i class="fa-solid fa-rocket mr-2"></i> W - WILL (Ý chí / Cam kết)</label>
+                            <p class="text-gray-600 text-lg mb-2">Bạn cam kết làm gì? Khi nào? Trên thang 1-10, mức độ cam kết là bao nhiêu?</p>
+                            <textarea name="will" class="form-textarea" placeholder="Nhập các bước hành động cụ thể, thời gian..."></textarea>
+                        </div>
+                    </form>
+                `,
+                example_html: `
+                    <div class="space-y-6">
+                        <div>
+                            <label class="form-label text-brand-orange"><i class="fa-solid fa-compass mr-2"></i> T - TOPIC (Chủ đề)</label>
+                            <div class="form-textarea-example">Em cảm thấy hơi quá tải với dự án X. Em có 3 deadline đang chạy song song và task A thì đang bị vướng bên bộ phận khác.</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-blue"><i class="fa-solid fa-bullseye mr-2"></i> G - GOAL (Mục tiêu)</label>
+                            <div class="form-textarea-example">Em muốn có một kế hoạch hành động rõ ràng cho 2 ngày tới để em cảm thấy kiểm soát được tình hình và biết phải bắt đầu từ đâu.</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-green"><i class="fa-solid fa-magnifying-glass mr-2"></i> R - REALITY (Thực tế)</label>
+                            <div class="form-textarea-example">Em mới chỉ ngồi nhìn danh sách và cảm thấy lo lắng. Em chưa nói chuyện với bộ phận khác về task A, và em cũng chưa chia nhỏ task B vì nó có vẻ lớn quá.</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-red"><i class="fa-solid fa-lightbulb mr-2"></i> O - OPTIONS (Lựa chọn)</label>
+                            <div class="form-textarea-example">Em nghĩ em có thể: <br>1. Nói chuyện ngay với Trưởng nhóm bên kia về task A. <br>2. Dành 30 phút để chia nhỏ task B thành 5 bước đơn giản. <br>3. Hỏi anh xem có thể lùi deadline task C được không.</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-purple"><i class="fa-solid fa-rocket mr-2"></i> W - WILL (Ý chí / Cam kết)</label>
+                            <div class="form-textarea-example">Em sẽ đi chia nhỏ task B ngay sau cuộc họp này. Em cam kết 10/10. Em sẽ email cho bộ phận kia về task A trước 12h trưa nay.</div>
+                        </div>
+                    </div>
+                `
+            },
+            'cbin': {
+                title: 'Phản hồi CBIN',
+                icon: 'fa-solid fa-comments',
+                color: 'brand-orange',
+                description: `
+                    <div class="tool-description">
+                        <h3 class="text-xl font-bold text-brand-orange mb-2">Tổng quan về CBIN</h3>
+                        <p>Đây là công cụ PHẢN HỒI (Feedback), không phải coaching. Nó giúp bạn cấu trúc một phản hồi (cả tích cực và góp ý) một cách khách quan, rõ ràng và mang tính xây dựng.</p>
+                        <ul>
+                            <li><strong>Khi nào dùng:</strong> Khi bạn cần góp ý về một hành vi cụ thể *đã xảy ra* (ví dụ: nhân viên đi họp muộn, ngắt lời người khác, hoặc làm tốt một bài thuyết trình).</li>
+                            <li><strong>Triết lý:</strong> Tập trung vào <span class="font-bold">hành vi (Behavior)</span>, không phải <span class="font-bold">thái độ (Attitude)</span>. Tách biệt sự kiện khỏi phán xét.</li>
+                        </ul>
+                    </div>
+                `,
+                example_description: `
+                    <div class="tool-description-example">
+                        <h3 class="text-xl font-bold text-brand-blue mb-2">Phân tích Ví dụ</h3>
+                        <p>Ví dụ này cho thấy cách góp ý về một hành vi tiêu cực (ngắt lời). Lưu ý người quản lý không nói "Bạn thật thô lỗ" (phán xét thái độ), mà chỉ mô tả "Tôi quan sát thấy bạn ngắt lời 3 lần" (mô tả hành vi) và "điều đó làm An mất tự tin" (nêu ảnh hưởng).</p>
+                    </div>
+                `,
+                empty_html: `
+                    <form id="cbin-form" class="space-y-6">
+                        <div>
+                            <label class="form-label text-brand-orange"><i class="fa-solid fa-calendar-days mr-2"></i> C - CONTEXT (Bối cảnh)</label>
+                            <p class="text-gray-600 text-lg mb-2">Phản hồi về sự kiện cụ thể nào? (Ở đâu? Khi nào?)</p>
+                            <textarea name="context" class="form-textarea" placeholder="Nhập bối cảnh cụ thể..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-blue"><i class="fa-solid fa-person-running mr-2"></i> B - BEHAVIOR (Hành vi)</label>
+                            <p class="text-gray-600 text-lg mb-2">Hành vi (có thể quan sát) mà bạn đã thấy hoặc nghe là gì?</p>
+                            <textarea name="behavior" class="form-textarea" placeholder="Mô tả hành vi khách quan, không phán xét..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-green"><i class="fa-solid fa-arrows-spin mr-2"></i> I - IMPACT (Ảnh hưởng)</label>
+                            <p class="text-gray-600 text-lg mb-2">Hành vi đó đã tạo ra ảnh hưởng (tích cực hoặc tiêu cực) gì đến team, dự án, hoặc bạn?</p>
+                            <textarea name="impact" class="form-textarea" placeholder="Mô tả ảnh hưởng thực tế..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-purple"><i class="fa-solid fa-forward mr-2"></i> N - NEXT STEPS (Bước tiếp theo)</label>
+                            <p class="text-gray-600 text-lg mb-2">Chúng ta có thể đồng thuận về hành động nào cho lần tới? (Nếu là phản hồi tích cực: "Hãy tiếp tục phát huy!")</p>
+                            <textarea name="next_steps" class="form-textarea" placeholder="Nhập các bước cam kết cho tương lai..."></textarea>
+                        </div>
+                    </form>
+                `,
+                example_html: `
+                    <div class="space-y-6">
+                        <div>
+                            <label class="form-label text-brand-orange"><i class="fa-solid fa-calendar-days mr-2"></i> C - CONTEXT (Bối cảnh)</label>
+                            <div class="form-textarea-example">"Trong cuộc họp team sáng nay khi An đang trình bày về tiến độ dự án..."</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-blue"><i class="fa-solid fa-person-running mr-2"></i> B - BEHAVIOR (Hành vi)</label>
+                            <div class="form-textarea-example">"...Tôi quan sát thấy bạn đã ngắt lời An 3 lần để đặt câu hỏi khi An chưa trình bày xong ý."</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-green"><i class="fa-solid fa-arrows-spin mr-2"></i> I - IMPACT (Ảnh hưởng)</label>
+                            <div class="form-textarea-example">"...Điều đó làm gián đoạn dòng chảy của cuộc họp và tôi thấy An có vẻ bị mất tự tin sau lần thứ 3, khiến phần trình bày sau đó không còn rõ ràng."</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-purple"><i class="fa-solid fa-forward mr-2"></i> N - NEXT STEPS (Bước tiếp theo)</label>
+                            <div class="form-textarea-example">"Lần tới, tôi đề nghị bạn có thể ghi lại các câu hỏi của mình và đợi đến cuối phần trình bày để hỏi được không? Điều đó sẽ giúp người trình bày tập trung hơn."</div>
+                        </div>
+                    </div>
+                `
+            },
+            'sdt': {
+                title: 'Chẩn đoán Động lực (SDT)',
+                icon: 'fa-solid fa-battery-three-quarters',
+                color: 'brand-blue',
+                description: `
+                    <div class="tool-description">
+                        <h3 class="text-xl font-bold text-brand-orange mb-2">Tổng quan về SDT</h3>
+                        <p>Đây là công cụ CHẨN ĐOÁN. SDT (Self-Determination Theory - Thuyết Tự quyết) là công cụ giúp bạn tìm ra nguyên nhân GỐC RỄ của việc "thiếu động lực".</p>
+                        <ul>
+                            <li><strong>Khi nào dùng:</strong> Khi nhân viên có vẻ chán nản, mệt mỏi, hiệu suất giảm sút, hoặc nói "Tôi không có động lực" nhưng bạn không rõ tại sao.</li>
+                            <li><strong>Triết lý:</strong> Động lực nội tại đến từ 3 nhu cầu tâm lý: Tự chủ (Autonomy), Năng lực (Competence), và Kết nối (Relatedness). Công việc của bạn là tìm ra nhu cầu nào đang bị thiếu.</li>
+                        </ul>
+                    </div>
+                `,
+                example_description: `
+                    <div class="tool-description-example">
+                        <h3 class="text-xl font-bold text-brand-blue mb-2">Phân tích Ví dụ</h3>
+                        <p>Vấn đề của An không phải là "lười biếng", mà là nhu cầu về <span class="font-bold">Năng lực</span> (công việc quá dễ) và <span class="font-bold">Kết nối</span> (công việc vô nghĩa) không được đáp ứng. Thay vì la mắng (dùng CBIN), giải pháp ở đây là tìm một dự án thách thức hơn (Giao việc) hoặc dùng GROW để kết nối công việc với mục tiêu lớn.</p>
+                    </div>
+                `,
+                empty_html: `
+                    <form id="sdt-form" class="space-y-6">
+                        <p class="text-gray-600 text-lg mb-2">Sử dụng 3 nhu cầu tâm lý này để chẩn đoán nguyên nhân gốc rễ khi nhân viên thiếu động lực.</p>
+                        <div>
+                            <label class="form-label text-brand-blue"><i class="fa-solid fa-hand-paper mr-2"></i> 1. AUTONOMY (Quyền tự chủ)</label>
+                            <p class="text-gray-600 text-lg mb-2">Họ có cảm thấy bị quản lý vi mô không? Họ có quyền ra quyết định trong công việc của mình không?</p>
+                            <textarea name="autonomy" class="form-textarea" placeholder="Ghi chú về mức độ Tự chủ của nhân viên..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-orange"><i class="fa-solid fa-star mr-2"></i> 2. COMPETENCE (Năng lực)</label>
+                            <p class="text-gray-600 text-lg mb-2">Họ có cảm thấy mình giỏi không? Công việc có quá dễ (nhàm chán) hoặc quá khó (gây nản) không?</p>
+                            <textarea name="competence" class="form-textarea" placeholder="Ghi chú về cảm nhận Năng lực..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-green"><i class="fa-solid fa-users mr-2"></i> 3. RELATEDNESS (Sự kết nối)</label>
+                            <p class="text-gray-600 text-lg mb-2">Họ có cảm thấy thuộc về team không? Họ có thấy ý nghĩa/mục đích trong công việc họ làm không?</p>
+                            <textarea name="relatedness" class="form-textarea" placeholder="Ghi chú về mức độ Kết nối..."></textarea>
+                        </div>
+                    </form>
+                `,
+                example_html: `
+                    <div class="space-y-6">
+                        <p class="text-gray-600 text-lg mb-2">Ví dụ: Chẩn đoán nhân viên "An" (hiệu suất cao) đột ngột thiếu động lực.</p>
+                        <div>
+                            <label class="form-label text-brand-blue"><i class="fa-solid fa-hand-paper mr-2"></i> 1. AUTONOMY (Quyền tự chủ)</label>
+                            <div class="form-textarea-example">Có vẻ ổn. An vẫn đang tự chủ quản lý dự án của mình. Không có dấu hiệu bị quản lý vi mô.</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-orange"><i class="fa-solid fa-star mr-2"></i> 2. COMPETENCE (Năng lực)</label>
+                            <div class="form-textarea-example">Đây có thể là vấn đề! An phàn nàn rằng dự án mới dùng công nghệ cũ, An không học được gì mới. Cảm thấy "nhàm chán" và "giậm chân tại chỗ". (Năng lực bị thừa).</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-green"><i class="fa-solid fa-users mr-2"></i> 3. RELATEDNESS (Sự kết nối)</label>
+                            <div class="form-textarea-example">Cũng là vấn đề. An không hiểu dự án bảo trì này đóng góp gì cho mục tiêu lớn của công ty. Cảm thấy công việc "vô nghĩa".</div>
+                        </div>
+                    </div>
+                `
+            },
+            '7-questions': {
+                title: '7 Câu hỏi (Checklist)',
+                icon: 'fa-solid fa-list-check',
+                color: 'brand-darkblue',
+                description: `
+                    <div class="tool-description">
+                        <h3 class="text-xl font-bold text-brand-orange mb-2">Tổng quan về 7 Câu hỏi</h3>
+                        <p>Đây là công cụ XÂY DỰNG THÓI QUEN (Habit-Forming). Nó được thiết kế để biến coaching thành một thói quen hàng ngày, diễn ra trong "10 phút hoặc ít hơn", thay vì một sự kiện trang trọng.</p>
+                        <ul>
+                            <li><strong>Khi nào dùng:</strong> Bất cứ lúc nào nhân viên đến gặp bạn và nói "Anh/chị có 5 phút không?". Dùng trong các cuộc họp 1:1, hoặc ngay tại hành lang.</li>
+                            <li><strong>Triết lý:</strong> "Nói ít lại, hỏi nhiều hơn, và làm cho sự tò mò của bạn trở thành thói quen."</li>
+                        </ul>
+                    </div>
+                `,
+                example_description: `
+                    <div class="tool-description-example">
+                        <h3 class="text-xl font-bold text-brand-blue mb-2">Phân tích Ví dụ</h3>
+                        <p>Lưu ý sức mạnh của câu hỏi số 2 ("Và còn điều gì nữa không?") và số 3 ("Thách thức *thực sự* là gì?"). Chúng giúp lột bỏ vấn đề bề mặt ("khách hàng Y") để tìm ra vấn đề cốt lõi ("slide họp thứ 6"). Chỉ sau khi biết vấn đề thực sự, bạn mới có thể coach hiệu quả.</p>
+                    </div>
+                `,
+                empty_html: `
+                    <form id="7-questions-form" class="space-y-4">
+                        <p class="text-gray-600 text-lg mb-2">Sử dụng checklist này cho các cuộc hội thoại coaching "10 phút" không chính thức.</p>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="q1" class="form-checklist-input">
+                            1. "Điều gì đang trong tâm trí bạn?" (Mở đầu)
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="q2" class="form-checklist-input">
+                            2. "Và còn điều gì nữa không?" (Đào sâu)
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="q3" class="form-checklist-input">
+                            3. "Thách thức *thực sự* ở đây đối với bạn là gì?" (Tập trung)
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="q4" class="form-checklist-input">
+                            4. "Bạn muốn điều gì?" (Mục tiêu)
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="q5" class="form-checklist-input">
+                            5. "Tôi có thể giúp gì?" (Ngăn nhảy vào)
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="q6" class="form-checklist-input">
+                            6. "Nếu bạn nói 'có' với điều này, bạn đang nói 'không' với điều gì?" (Chi phí)
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="q7" class="form-checklist-input">
+                            7. "Điều gì là hữu ích nhất cho bạn?" (Kết thúc)
+                        </label>
+                    </form>
+                `,
+                example_html: `
+                    <p class="text-gray-600 text-lg mb-4">Checklist này không phải là một kịch bản cứng, mà là một "dòng chảy".</p>
+                    <div class="space-y-4">
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-brand-orange">
+                            <p class="text-xl text-gray-700"><b>1. "Điều gì đang trong tâm trí bạn?"</b></p>
+                            <p class="text-lg text-gray-600 italic ml-6">"Tôi đang gặp rắc rối với khách hàng Y."</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border">
+                            <p class="text-xl text-gray-700"><b>2. "Và còn điều gì nữa không?"</b></p>
+                            <p class="text-lg text-gray-600 italic ml-6">"Thực ra là cả việc tôi phải chuẩn bị slide cho buổi họp thứ 6."</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-brand-orange">
+                            <p class="text-xl text-gray-700"><b>3. "Thách thức *thực sự* ở đây là gì?"</b></p>
+                            <p class="text-lg text-gray-600 italic ml-6">"Tôi nghĩ thách thức thực sự là việc chuẩn bị slide, vì nó chiếm thời gian xử lý khách hàng Y."</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border">
+                            <p class="text-xl text-gray-700"><b>4. "Bạn muốn điều gì?"</b></p>
+                            <p class="text-lg text-gray-600 italic ml-6">"Tôi muốn một giải pháp cho cái slide đó."</p>
+                        </div>
+                         <div class="bg-white p-4 rounded-lg shadow-sm border">
+                            <p class="text-xl text-gray-700"><b>5. "Tôi có thể giúp gì?"</b></p>
+                            <p class="text-lg text-gray-600 italic ml-6">"Anh có thể xem qua bản nháp của tôi vào chiều mai không?"</p>
+                        </div>
+                         <div class="bg-white p-4 rounded-lg shadow-sm border">
+                            <p class="text-xl text-gray-700"><b>7. "Điều gì là hữu ích nhất cho bạn (từ cuộc trò chuyện này)?"</b></p>
+                            <p class="text-lg text-gray-600 italic ml-6">"Việc nhận ra cái slide mới là vấn đề chính. Cảm ơn anh."</p>
+                        </div>
+                    </div>
+                `
+            },
+            'one-on-one': {
+                title: 'Họp 1:1 (10-10-10)',
+                icon: 'fa-solid fa-users',
+                color: 'brand-blue',
+                description: `
+                    <div class="tool-description">
+                        <h3 class="text-xl font-bold text-brand-orange mb-2">Tổng quan về Họp 1:1</h3>
+                        <p>Đây là KỊCH BẢN ỨNG DỤNG. Mô hình 10-10-10 là một cách đơn giản để cấu trúc lại các buổi họp 1:1 hàng tuần/hàng tháng, đảm bảo sự cân bằng giữa nhu cầu của nhân viên và của quản lý.</p>
+                        <ul>
+                            <li><strong>Khi nào dùng:</strong> Dùng cho các buổi họp 1:1 định kỳ.</li>
+                            <li><strong>Triết lý:</strong> Biến 1:1 từ một buổi "báo cáo tình trạng" (status report) thành một buổi "đối thoại phát triển" (development conversation). Nguyên tắc vàng: <span class="font-bold">Nhân viên sở hữu 10 phút đầu tiên.</span></li>
+                        </ul>
+                    </div>
+                `,
+                example_description: `
+                    <div class="tool-description-example">
+                        <h3 class="text-xl font-bold text-brand-blue mb-2">Phân tích Ví dụ</h3>
+                        <p>Ví dụ này cho thấy cách 3 công cụ (CBIN, GROW, SDT) được lồng ghép một cách hệ thống vào một kịch bản 1:1. Người quản lý dùng 10' giữa để đưa phản hồi tích cực (CBIN), và dùng 10' cuối để coach phát triển sự nghiệp (GROW) dựa trên động lực (SDT) của nhân viên.</p>
+                    </div>
+                `,
+                empty_html: `
+                    <form id="one-on-one-form" class="space-y-6">
+                        <p class="text-gray-600 text-lg mb-2">Sử dụng cấu trúc 10-10-10 để biến buổi họp 1:1 thành một phiên phát triển hiệu quả.</p>
+                        <div>
+                            <label class="form-label text-brand-blue"><i class="fa-solid fa-user-clock mr-2"></i> 10' ĐẦU: CỦA HỌ (Coachee)</label>
+                            <p class="text-gray-600 text-lg mb-2">Nhân viên chia sẻ. Quản lý: Chỉ Lắng nghe & Đặt câu hỏi.</p>
+                            <textarea name="coachee_time" class="form-textarea" placeholder="Ghi chú những điểm chính nhân viên chia sẻ..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-orange"><i class="fa-solid fa-user-tie mr-2"></i> 10' GIỮA: CỦA BẠN (Coach)</label>
+                            <p class="text-gray-600 text-lg mb-2">Quản lý chia sẻ thông tin, cập nhật, và đưa phản hồi (dùng CBIN nếu cần).</p>
+                            <textarea name="coach_time" class="form-textarea" placeholder="Ghi chú những điểm bạn cần chia sẻ..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-green"><i class="fa-solid fa-flag-checkered mr-2"></i> 10' CUỐI: TƯƠNG LAI (Cả hai)</label>
+                            <p class="text-gray-600 text-lg mb-2">Tập trung phát triển, các bước tiếp theo (dùng GROW để chốt hành động).</p>
+                            <textarea name="future_time" class="form-textarea" placeholder="Ghi chú các cam kết và bước hành động tiếp theo..."></textarea>
+                        </div>
+                    </form>
+                `,
+                example_html: `
+                    <div class="space-y-6">
+                        <div>
+                            <label class="form-label text-brand-blue"><i class="fa-solid fa-user-clock mr-2"></i> 10' ĐẦU: CỦA HỌ (Coachee)</label>
+                            <div class="form-textarea-example">
+                                - Chia sẻ về việc đang gặp khó khăn khi làm việc với team B.
+                                - Cảm thấy tự hào vì đã đóng được hợp đồng X.
+                                - Hỏi về cơ hội phát triển lên vị trí Senior.
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-orange"><i class="fa-solid fa-user-tie mr-2"></i> 10' GIỮA: CỦA BẠN (Coach)</label>
+                            <div class="form-textarea-example">
+                                - Cập nhật về chiến lược mới của công ty trong Quý 4.
+                                - Phản hồi CBIN tích cực: (C) "Trong hợp đồng X," (B) "chị thấy em đã xử lý khâu đàm phán giá rất tốt," (I) "giúp mang về lợi nhuận cao hơn 5%." (N) "Hãy chia sẻ kinh nghiệm này cho team nhé."
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-green"><i class="fa-solid fa-flag-checkered mr-2"></i> 10' CUỐI: TƯƠNG LAI (Cả hai)</label>
+                            <div class="form-textarea-example">
+                                - Dùng GROW cho mục tiêu "Senior":
+                                - (G) "Mục tiêu là lên Senior trong 6 tháng tới."
+                                - (R) "Hiện tại đang thiếu kỹ năng X và Y."
+                                - (O) "Lựa chọn là: 1. Nhận dự án khó Z, 2. Mentor cho 1 bạn mới."
+                                - (W) "Cam kết: Đăng ký khóa học X trong tuần này."
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            'delegation': {
+                title: 'Giao việc (Delegation)',
+                icon: 'fa-solid fa-user-plus',
+                color: 'brand-purple',
+                description: `
+                    <div class="tool-description">
+                        <h3 class="text-xl font-bold text-brand-orange mb-2">Tổng quan về Coaching Giao việc</h3>
+                        <p>Đây là KỊCH BẢN ỨNG DỤNG. Hầu hết các nhà quản lý "Vứt việc" (Dumping). Nhà quản lý-coach "Giao việc" (Delegating) bằng cách sử dụng nó như một cơ hội để phát triển nhân viên.</p>
+                        <ul>
+                            <li><strong>Khi nào dùng:</strong> Bất cứ khi nào bạn chuẩn bị giao một nhiệm vụ mới, đặc biệt là các nhiệm vụ có độ thách thức.</li>
+                            <li><strong>Triết lý:</strong> Giao việc không phải là "lấy việc ra khỏi bàn của bạn", mà là "đặt cơ hội phát triển lên bàn của nhân viên". Nó kết nối trực tiếp với nhu cầu <span class="font-bold">Năng lực</span> và <span class="font-bold">Tự chủ</span> (SDT).</li>
+                        </ul>
+                    </div>
+                `,
+                example_description: `
+                    <div class="tool-description-example">
+                        <h3 class="text-xl font-bold text-brand-blue mb-2">Phân tích Ví dụ</h3>
+                        <p>Sự khác biệt nằm ở Bước 1: Người quản lý đã kết nối nhiệm vụ (tổ chức webinar) với mục tiêu của An (muốn phát triển kỹ năng tổ chức sự kiện). Điều này biến một "nhiệm vụ" thành một "cơ hội". Các bước còn lại đảm bảo sự rõ ràng và trao quyền, thay vì quản lý vi mô.</p>
+                    </div>
+                `,
+                empty_html: `
+                    <form id="delegation-form" class="space-y-4">
+                        <p class="text-gray-600 text-lg mb-2">Dùng checklist này để đảm bảo bạn "Giao việc" (Phát triển) chứ không phải "Vứt việc" (Dumping).</p>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="d1" class="form-checklist-input">
+                            1. (TRƯỚC) Đã kết nối nhiệm vụ với mục tiêu/động lực của nhân viên. (Họ có muốn làm không?)
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="d2" class="form-checklist-input">
+                            2. (TRONG) Đã làm rõ "Thành công trông như thế nào?" (Kết quả cuối cùng là gì?)
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="d3" class="form-checklist-input">
+                            3. (TRONG) Đã trao đủ THẨM QUYỀN (Họ có quyền tự quyết định X, Y không?)
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="d4" class="form-checklist-input">
+                            4. (TRONG) Đã cung cấp đủ NGUỒN LỰC (Họ cần ngân sách, thời gian, hay hỗ trợ gì?)
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="d5" class="form-checklist-input">
+                            5. (SAU) Đã thiết lập lịch check-in rõ ràng (không phải quản lý vi mô).
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="d6" class="form-checklist-input">
+                            6. (SAU) Đã xác nhận lại: "Bạn có câu hỏi gì cho tôi không?"
+                        </label>
+                        <div>
+                            <label class="form-label text-brand-purple mt-6"><i class="fa-solid fa-clipboard-list mr-2"></i> Ghi chú Giao việc</label>
+                            <textarea name="notes" class="form-textarea" placeholder="Ghi chú cụ thể về nhiệm vụ được giao..."></textarea>
+                        </div>
+                    </form>
+                `,
+                example_html: `
+                    <p class="text-gray-600 text-lg mb-4">Ví dụ: Giao nhiệm vụ "Tổ chức webinar tháng 12" cho nhân viên An.</p>
+                    <div class="space-y-4">
+                        <label class="form-checklist-label bg-green-50 border-green-300">
+                            <input type="checkbox" name="d1" class="form-checklist-input" checked disabled>
+                            1. (TRƯỚC) Đã kết nối: "An nói muốn phát triển kỹ năng tổ chức sự kiện, đây là cơ hội tốt..."
+                        </label>
+                        <label class="form-checklist-label bg-green-50 border-green-300">
+                            <input type="checkbox" name="d2" class="form-checklist-input" checked disabled>
+                            2. (TRONG) Đã làm rõ: "Thành công là có ít nhất 50 người tham dự và 10 leads chất lượng."
+                        </label>
+                        <label class="form-checklist-label bg-green-50 border-green-300">
+                            <input type="checkbox" name="d3" class="form-checklist-input" checked disabled>
+                            3. (TRONG) Đã trao THẨM QUYỀN: "Em toàn quyền quyết định nội dung và diễn giả."
+                        </label>
+                        <label class="form-checklist-label bg-green-50 border-green-300">
+                            <input type="checkbox" name="d4" class="form-checklist-input" checked disabled>
+                            4. (TRONG) Đã cung cấp NGUỒN LỰC: "Ngân sách là 5 triệu. Team design sẽ hỗ trợ em."
+                        </label>
+                        <label class="form-checklist-label bg-green-50 border-green-300">
+                            <input type="checkbox" name="d5" class="form-checklist-input" checked disabled>
+                            5. (SAU) Đã thiết lập check-in: "Chúng ta sẽ check-in 15 phút vào thứ 4 tuần sau."
+                        </label>
+                        <label class="form-checklist-label">
+                            <input type="checkbox" name="d6" class="form-checklist-input" disabled>
+                            6. (SAU) Đã xác nhận lại: ...
+                        </label>
+                        <div>
+                            <label class="form-label text-brand-purple mt-6"><i class="fa-solid fa-clipboard-list mr-2"></i> Ghi chú Giao việc</label>
+                            <div class="form-textarea-example">Giao An tổ chức webinar T12. An rất hào hứng. Đã làm rõ 4/6 bước. Cần theo dõi sát deadline tuần đầu tiên.</div>
+                        </div>
+                    </div>
+                `
+            },
+            'failure-coaching': {
+                title: 'Xử lý Sai sót (4 Bước)',
+                icon: 'fa-solid fa-heart-crack',
+                color: 'brand-red',
+                description: `
+                    <div class="tool-description">
+                        <h3 class="text-xl font-bold text-brand-orange mb-2">Tổng quan về Coaching Xử lý Sai sót</h3>
+                        <p>Đây là KỊCH BẢN ỨNG DỤNG. Một trong những thời điểm coaching quan trọng nhất là khi có sai sót xảy ra. Phản ứng của bạn sẽ quyết định nhân viên học được bài học hay học cách che giấu lỗi sai.</p>
+                        <ul>
+                            <li><strong>Khi nào dùng:</strong> Khi một nhân viên mắc lỗi, trễ deadline, hoặc gây ra một kết quả không mong muốn.</li>
+                            <li><strong>Triết lý:</strong> Biến sai lầm thành "cơ hội học tập" (learning opportunity), không phải "phiên đổ lỗi" (blaming session). Tập trung vào <span class="font-bold">quy trình</span>, không phải <span class="font-bold">cá nhân</span>.</li>
+                        </ul>
+                    </div>
+                `,
+                example_description: `
+                    <div class="tool-description-example">
+                        <h3 class="text-xl font-bold text-brand-blue mb-2">Phân tích Ví dụ</h3>
+                        <p>Lưu ý câu hỏi đầu tiên: "Điều gì xảy ra trong *quy trình*?" Nó ngay lập tức gỡ bỏ sự phòng thủ của nhân viên. Thay vì trừng phạt, người quản lý đã coach An tự tìm ra giải pháp (Delay Send) và chịu trách nhiệm (nhờ Bình check). Kết quả là An học được bài học và quy trình được cải thiện.</p>
+                    </div>
+                `,
+                empty_html: `
+                    <form id="failure-coaching-form" class="space-y-6">
+                        <p class="text-gray-600 text-lg mb-2">Biến sai lầm thành cơ hội học tập. Mục tiêu là tạo khả năng phục hồi (resilience).</p>
+                        <div>
+                            <label class="form-label text-brand-blue"><i class="fa-solid fa-question-circle mr-2"></i> 1. HỎI (Không đổ lỗi)</label>
+                            <p class="text-gray-600 text-lg mb-2">"Điều gì đã xảy ra trong *quy trình* dẫn đến kết quả này?" (Tránh: "Tại sao *bạn* làm sai?")</p>
+                            <textarea name="step1" class="form-textarea" placeholder="Ghi chú của nhân viên về những gì đã xảy ra..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-orange"><i class="fa-solid fa-brain mr-2"></i> 2. KHƠI GỢI NHẬN THỨC</label>
+                            <p class="text-gray-600 text-lg mb-2">"Theo bạn, hậu quả của sai sót này là gì?"</p>
+                            <textarea name="step2" class="form-textarea" placeholder="Ghi chú về nhận thức của nhân viên..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-green"><i class="fa-solid fa-lightbulb mr-2"></i> 3. TRAO QUYỀN GIẢI PHÁP</label>
+                            <p class="text-gray-600 text-lg mb-2">"Vậy, *bạn* đề xuất giải pháp nào để đảm bảo điều này không lặp lại?"</p>
+                            <textarea name="step3" class="form-textarea" placeholder="Giải pháp của nhân viên đề xuất..."></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-purple"><i class="fa-solid fa-book-open mr-2"></i> 4. TÓM TẮT BÀI HỌC</label>
+                            <p class="text-gray-600 text-lg mb-2">"Bạn học được gì từ kinh nghiệm này?"</p>
+                            <textarea name="step4" class="form-textarea" placeholder="Bài học nhân viên tự đúc kết..."></textarea>
+                        </div>
+                    </form>
+                `,
+                example_html: `
+                    <div class="space-y-6">
+                        <p class="text-gray-600 text-lg mb-2">Ví dụ: Nhân viên An gửi nhầm báo giá cho khách hàng.</p>
+                        <div>
+                            <label class="form-label text-brand-blue"><i class="fa-solid fa-question-circle mr-2"></i> 1. HỎI (Không đổ lỗi)</label>
+                            <div class="form-textarea-example">An nói rằng bạn ấy đã vội vàng và không kiểm tra lại file đính kèm trước khi gửi. Quy trình là phải có 1 người khác check, nhưng bạn đã bỏ qua.</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-orange"><i class="fa-solid fa-brain mr-2"></i> 2. KHƠI GỢI NHẬN THỨC</label>
+                            <div class="form-textarea-example">An nhận ra điều này làm khách hàng bối rối, team sales phải mất 1 tiếng để giải thích lại, và làm giảm sự chuyên nghiệp của công ty.</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-green"><i class="fa-solid fa-lightbulb mr-2"></i> 3. TRAO QUYỀN GIẢI PHÁP</label>
+                            <div class="form-textarea-example">An đề xuất: "Từ giờ, em sẽ luôn đặt email ở chế độ 'Delay Send' 1 phút để kiểm tra lại. Với các báo giá lớn, em sẽ nhờ Bình check file trước khi gửi."</div>
+                        </div>
+                        <div>
+                            <label class="form-label text-brand-purple"><i class="fa-solid fa-book-open mr-2"></i> 4. TÓM TẮT BÀI HỌC</label>
+                            <div class="form-textarea-example">An học được rằng 1 phút kiểm tra kỹ còn hơn 1 tiếng đi sửa sai.</div>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        // === KHỞI TẠO ỨNG DỤNG ===
+        
+        const tabNav = document.getElementById('tab-nav');
+        const contentContainer = document.getElementById('content-container');
+        const printArea = document.getElementById('print-area');
+        
+        let currentTabId = null;
+        let currentMode = 'empty';
+
+        // 1. Hàm khởi tạo chính
+        function init() {
+            // Tạo các nút Tab
+            Object.keys(toolData).forEach(tabId => {
+                const tool = toolData[tabId];
+                const btn = document.createElement('button');
+                btn.className = 'tab-btn';
+                btn.id = `tab-btn-${tabId}`;
+                btn.innerHTML = `<i class="${tool.icon} mr-2 opacity-80"></i> ${tool.title}`;
+                btn.onclick = () => showTab(tabId);
+                tabNav.appendChild(btn);
+            });
+
+            // Hiển thị tab đầu tiên
+            showTab(Object.keys(toolData)[0]);
+        }
+
+        // 2. Hàm hiển thị Tab chính
+        function showTab(tabId) {
+            currentTabId = tabId;
+            const tool = toolData[tabId];
+
+            // Cập nhật trạng thái active cho nút tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('tab-active');
+                // Xóa tất cả các màu
+                const colors = ['brand-green', 'brand-orange', 'brand-blue', 'brand-darkblue', 'brand-red', 'brand-purple'];
+                colors.forEach(color => {
+                    btn.classList.remove(`text-${color}`, `border-${color}`);
+                });
+            });
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            activeBtn.classList.add('tab-active', `text-${tool.color}`, `border-${tool.color}`);
+
+            // Tạo HTML cho nội dung tab
+            contentContainer.innerHTML = `
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                    <!-- Sub-nav: Trống / Ví dụ -->
+                    <div class="flex gap-2 bg-gray-200 p-1 rounded-lg flex-shrink-0">
+                        <button id="mode-btn-empty" class="mode-btn" onclick="showMode('${tabId}', 'empty')">
+                            <i class="fa-solid fa-file-lines mr-1"></i> Biểu mẫu trống
+                        </button>
+                        <button id="mode-btn-example" class="mode-btn" onclick="showMode('${tabId}', 'example')">
+                            <i class="fa-solid fa-file-prescription mr-1"></i> Ví dụ Minh họa
+                        </button>
+                    </div>
+                    
+                    <!-- Nút In -->
+                    <button id="print-btn" class="px-5 py-2 bg-brand-blue text-white font-semibold rounded-lg shadow hover:bg-brand-darkblue transition-all no-print w-full sm:w-auto">
+                        <i class="fa-solid fa-print mr-2"></i> In Biểu mẫu này
+                    </button>
+                </div>
+
+                <!-- Vùng chứa nội dung (trống hoặc ví dụ) -->
+                <div id="${tabId}-content" class="bg-white p-6 md:p-10 rounded-lg shadow-lg">
+                    <!-- Nội dung sẽ được chèn bởi showMode() -->
+                </div>
+            `;
+
+            // Gán sự kiện cho nút In
+            document.getElementById('print-btn').onclick = () => printContent(tabId, currentMode);
+            
+            // Hiển thị chế độ mặc định (trống)
+            showMode(tabId, 'empty');
+        }
+
+        // 3. Hàm chuyển chế độ (Trống / Ví dụ)
+        function showMode(tabId, mode) {
+            currentMode = mode;
+            const tool = toolData[tabId];
+            const contentDiv = document.getElementById(`${tabId}-content`);
+
+            // Cập nhật trạng thái active cho nút chế độ
+            const emptyBtn = document.getElementById('mode-btn-empty');
+            const exampleBtn = document.getElementById('mode-btn-example');
+            
+            // Xóa tất cả các màu
+            const colors = ['brand-green', 'brand-orange', 'brand-blue', 'brand-darkblue', 'brand-red', 'brand-purple'];
+            colors.forEach(color => {
+                emptyBtn.classList.remove('mode-active', `bg-${color}`);
+                exampleBtn.classList.remove('mode-active', `bg-${color}`);
+            });
+
+            if (mode === 'empty') {
+                contentDiv.innerHTML = tool.description + tool.empty_html; // Thêm mô tả
+                emptyBtn.classList.add('mode-active', `bg-${tool.color}`);
+                // Gán sự kiện lưu tự động cho biểu mẫu trống
+                contentDiv.querySelectorAll('textarea, input[type="checkbox"]').forEach(input => {
+                    input.addEventListener('input', () => saveData(tabId));
+                });
+                // Tải lại dữ liệu (phòng trường hợp người dùng click qua lại)
+                loadData(tabId);
+            } else {
+                contentDiv.innerHTML = tool.example_description + tool.example_html; // Thêm mô tả ví dụ
+                exampleBtn.classList.add('mode-active', `bg-${tool.color}`);
+            }
+        }
+
+        // 4. Hàm Lưu dữ liệu vào localStorage
+        function saveData(tabId) {
+            const form = document.getElementById(`${tabId}-form`);
+            if (!form) return;
+
+            const formData = new FormData(form);
+            const data = {};
+            // Xử lý cả textarea và checkbox
+            formData.forEach((value, key) => {
+                const element = form.elements[key];
+                // Xử lý trường hợp có nhiều checkbox cùng tên (ít xảy ra ở đây, nhưng để đề phòng)
+                if (element && element.length && !element.nodeName) { // NodeList
+                     data[key] = Array.from(element).filter(cb => cb.checked).map(cb => cb.value);
+                } else if (element && element.type === 'checkbox') {
+                    data[key] = element.checked;
+                } else if (element) {
+                    data[key] = value;
+                }
+            });
+            
+            localStorage.setItem(`coach_tool_${tabId}`, JSON.stringify(data));
+        }
+
+        // 5. Hàm Tải dữ liệu từ localStorage
+        function loadData(tabId) {
+            const form = document.getElementById(`${tabId}-form`);
+            if (!form) return; // Chỉ tải nếu đang ở biểu mẫu trống
+
+            const savedData = JSON.parse(localStorage.getItem(`coach_tool_${tabId}`));
+            if (savedData) {
+                Object.keys(savedData).forEach(key => {
+                    if (form.elements[key]) {
+                        const element = form.elements[key];
+                         if (element.length && !element.nodeName) { // NodeList
+                            Array.from(element).forEach(cb => {
+                                if (savedData[key] && savedData[key].includes(cb.value)) {
+                                    cb.checked = true;
+                                }
+                            });
+                         } else if (element.type === 'checkbox') {
+                            element.checked = savedData[key];
+                        } else {
+                            element.value = savedData[key];
+                        }
+                    }
+                });
+            }
+        }
+
+        // 6. Hàm In Chuyên nghiệp (Theo Công thức)
+        function printContent(tabId, mode) {
+            const tool = toolData[tabId];
+            const contentToPrint = document.getElementById(`${tabId}-content`).cloneNode(true);
+            
+            // Nếu là biểu mẫu trống, cần sao chép giá trị từ textarea và checkbox
+            if (mode === 'empty') {
+                const originalForm = document.getElementById(`${tabId}-form`);
+                if (originalForm) {
+                    const clonedForm = contentToPrint.querySelector(`#${tabId}-form`);
+                    
+                    originalForm.querySelectorAll('textarea').forEach(ta => {
+                        const clonedTa = clonedForm.querySelector(`[name="${ta.name}"]`);
+                        if(clonedTa) clonedTa.textContent = ta.value; // Chuyển value thành textContent để in
+                    });
+                    
+                    originalForm.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                        const clonedCb = clonedForm.querySelector(`[name="${cb.name}"]`);
+                        if(clonedCb) clonedCb.checked = cb.checked;
+                    });
+                }
+            }
+            
+            // Xóa các nút không cần thiết
+            contentToPrint.querySelectorAll('.no-print').forEach(el => el.remove());
+
+            // Xác định màu chính
+            let mainColor = '#1a237e'; // default
+            if(tool.color === 'brand-green') mainColor = '#009688';
+            if(tool.color === 'brand-orange') mainColor = '#FF9800';
+            if(tool.color === 'brand-blue') mainColor = '#5C6BC0';
+            if(tool.color === 'brand-red') mainColor = '#ef4444';
+            if(tool.color === 'brand-purple') mainColor = '#a855f7';
+
+            const printWindowHTML = `
+                <!DOCTYPE html>
+                <html lang="vi">
+                <head>
+                    <title>${tool.title}${mode === 'example' ? ' (Ví dụ)' : ''}</title>
+                    <script src="https://cdn.tailwindcss.com"><\/script>
+                    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+                    <style>
+                        body { font-family: 'Oswald', sans-serif; }
+                        @page { size: A4; margin: 20mm; }
+                        .form-label { color: ${mainColor}; }
+                        .form-label { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; display: block; }
+                        .form-textarea { 
+                            width: 100%; padding: 1rem; border: 1px dashed #ccc !important; background: #f9f9f9 !important; border-radius: 0.5rem;
+                            min-height: 100px; font-size: 1rem; color: #000 !important; font-family: Arial, sans-serif; 
+                            white-space: pre-wrap; word-wrap: break-word; 
+                        }
+                        .form-textarea-example {
+                            width: 100%; padding: 1rem; border-left: 4px solid #5C6BC0 !important; background: #f0f4ff !important; border-radius: 0.5rem;
+                            min-height: 100px; font-size: 1rem; color: #333 !important; font-family: Arial, sans-serif; font-style: italic;
+                        }
+                        /* Mô tả (in) */
+                        .tool-description {
+                            font-family: Arial, sans-serif; line-height: 1.6; font-size: 11pt;
+                            background-color: #fef9f2 !important; border-left: 4px solid #FF9800 !important; 
+                            color: #000 !important; padding: 1rem; border-radius: 0.25rem; margin-bottom: 1.5rem;
+                        }
+                        .tool-description-example {
+                            font-family: Arial, sans-serif; line-height: 1.6; font-size: 11pt;
+                            background-color: #f0f4ff !important; border-left: 4px solid #5C6BC0 !important;
+                            color: #000 !important; padding: 1rem; border-radius: 0.25rem; margin-bottom: 1.5rem;
+                        }
+                        .tool-description h3, .tool-description-example h3 { font-size: 13pt; font-weight: bold; }
+                        .tool-description ul, .tool-description-example ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; }
+
+                        /* Màu sắc cho các label (in) */
+                        .text-brand-orange { color: #FF9800 !important; }
+                        .text-brand-green { color: #009688 !important; }
+                        .text-brand-blue { color: #5C6BC0 !important; }
+                        .text-brand-red { color: #ef4444 !important; }
+                        .text-brand-purple { color: #a855f7 !important; }
+                        .text-red-500 { color: #ef4444 !important; }
+                        .text-purple-500 { color: #a855f7 !important; }
+                        
+                        /* Styles cho checklist (in) */
+                        .form-checklist-label {
+                            background-color: #fff !important;
+                            box-shadow: none !important;
+                            border: 1px solid #ddd !important;
+                            padding: 1rem;
+                            border-radius: 0.5rem;
+                            display: flex;
+                            align-items: center;
+                            font-size: 1.25rem;
+                            color: #000 !important;
+                        }
+                        .form-checklist-input {
+                            -webkit-appearance: none;
+                            appearance: none;
+                            width: 1.25rem;
+                            height: 1.25rem;
+                            border: 1px solid #999;
+                            border-radius: 0.25rem;
+                            margin-right: 0.75rem;
+                            vertical-align: middle;
+                            position: relative;
+                            top: -2px;
+                            flex-shrink: 0;
+                        }
+                        .form-checklist-input:checked {
+                            background-color: #5C6BC0 !important;
+                            border-color: #5C6BC0 !important;
+                        }
+                        .form-checklist-input:checked::after {
+                            content: '✔';
+                            color: white !important;
+                            position: absolute;
+                            left: 50%;
+                            top: 50%;
+                            transform: translate(-50%, -50%);
+                            font-size: 0.8rem;
+                        }
+                        
+                        .text-gray-700 { color: #000 !important; }
+                        .text-gray-600 { color: #333 !important; }
+                    </style>
+                </head>
+                <body class="p-4">
+                    <h1 class="text-3xl font-bold mb-2" style="color: ${mainColor};">${tool.title}</h1>
+                    <h2 class="text-xl text-gray-700 mb-6 font-medium">${mode === 'example' ? 'Ví dụ Minh họa' : 'Biểu mẫu Thực hành'}</h2>
+                    <div class="print-content">
+                        ${contentToPrint.innerHTML}
+                    </div>
+                    <footer class="text-center text-xs text-gray-500 pt-6 mt-6 border-t">
+                        Học Liệu cho đào tạo. Bản quyền thuộc Rosie Đào Hạnh Giang CEO Build Talents
+                    </footer>
+                </body>
+                </html>
+            `;
+            
+            printArea.innerHTML = printWindowHTML;
+            
+            // Chờ một chút để DOM cập nhật
+            setTimeout(() => {
+                window.print();
+                printArea.innerHTML = ''; // Dọn dẹp
+            }, 500);
+        }
+
+        // === KHỞI CHẠY ===
+        init();
+
+    </script>
+</body>
+</html>
